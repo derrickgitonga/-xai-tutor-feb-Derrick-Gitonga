@@ -14,11 +14,12 @@ def get_connection() -> sqlite3.Connection:
 
 
 @contextmanager
-def get_db() -> Generator[sqlite3.Connection, None, None]:
-    """Context manager for database connections."""
+def get_db() -> Generator[sqlite3.Cursor, None, None]:
+    """Context manager for database connections that yields a cursor."""
     conn = get_connection()
     try:
-        yield conn
+        cursor = conn.cursor()
+        yield cursor
         conn.commit()
     except Exception:
         conn.rollback()
